@@ -5,43 +5,49 @@ class Login extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('M_user');
+		$this->load->model('Auth_model');
 	}
 
 	public function index()
 	{
-		$this->load->view('vlogin');
+		$this->load->view('auth/login');
 	}
 
-	public function indexUser()
+	public function process()
 	{
-		$this->load->view('vuser');
-	}
+		$email= $this->input->post('email');
+		$password = $this->input->post('password');
 
-	public function loginProcess()
-	{
-		$data = $this->M_user->admin();
+		$query = $this->db->get_where('users',array('email'=>$email));
+        $user = $query->row();
+        $level = $user->level;
+            if(password_verify($password, $user->password)) {
+                $this->session->set_userdata('email',$email);
+				$this->session->set_userdata('name',$user->name);
+				$this->session->set_userdata('is_login',TRUE);
 
-		$username = $data['username'];
-		$password = $data['password'];
-
-		$usernameForm = $this->input->post('username');
-		$passwordForm = $this->input->post('password');
-
-		if($username == $usernameForm && $password == $passwordForm){
-			$this->session->set_userdata($data);
-			redirect('login/indexUser');
-		}
-		else{
-			redirect('login');
-		}
-
+                if($level == 'admin'){
+					redirect('Dashboard/admin');
+				}
+				elseif($level == 'dosen'){
+					redirect('Dashboard/dosen');
+				}
+				elseif($level == 'mahasiswa'){
+					redirect('Dashboard/mahasiswa');
+				}
+				else{
+					redirect('Login');
+				}
+            } else {
+                $this->session->set_flashdata('error','Username / Password Tidak Sesuai');
+				redirect('Login');
+            }
 	}
 
 	public function logout()
 	{                                
 		session_destroy();
-		redirect('login');
+		redirect('Login');
 	}
 
 }
