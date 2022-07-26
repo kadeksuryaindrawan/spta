@@ -24,11 +24,11 @@
 									</div>
 							<?php endif ?>
                                     </div>
-                                <div class="col-10">
+                                <div class="col-lg-10">
                                     <h4 class="card-title">Data Dosen</h4>
                                 </div>
                                 
-                                <div class="col-2">
+                                <div class="col-lg-2">
                                     <a href="<?= base_url('DosenController/tambah') ?>"><button class="btn btn-primary text-white">Tambah Dosen</button></a>
                                 </div>
                                 </div>
@@ -38,6 +38,7 @@
                                     <table class="table table-striped table-bordered zero-configuration">
                                         <thead>
                                             <tr>
+                                                <th>Foto</th>
                                                 <th>NIP</th>
                                                 <th>Email</th>
                                                 <th>Nama</th>
@@ -50,6 +51,7 @@
                                         <?php 
 		                                foreach ($dosen->result_array() as $key): ?>
 			                                <tr>
+                                                <td><img src="<?= base_url('upload/img/dosen/'.$key['foto']) ?>" alt="" width="50px" height="70px"></td>
                                                 <td><?= $key['nip'] ?></td>
                                                 <td><?= $key['email'] ?></td>
                                                 <td><?= $key['name'] ?></td>
@@ -67,6 +69,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
+                                                <th>Foto</th>
                                                 <th>NIP</th>
                                                 <th>Email</th>
                                                 <th>Nama</th>
