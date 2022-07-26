@@ -10,7 +10,10 @@ class Login extends CI_Controller {
 
 	public function index()
 	{
+		$data['title'] = 'Login';
+		$this->load->view('widget/header-auth',$data);
 		$this->load->view('auth/login');
+		$this->load->view('widget/footer-auth');
 	}
 
 	public function process()
@@ -23,6 +26,7 @@ class Login extends CI_Controller {
         $level = $user->level;
             if(password_verify($password, $user->password)) {
                 $this->session->set_userdata('email',$email);
+				$this->session->set_userdata('level',$level);
 				$this->session->set_userdata('name',$user->name);
 				$this->session->set_userdata('is_login',TRUE);
 
@@ -39,7 +43,7 @@ class Login extends CI_Controller {
 					redirect('Login');
 				}
             } else {
-                $this->session->set_flashdata('error','Username / Password Tidak Sesuai');
+                $this->session->set_flashdata('error','Email / Password Tidak Sesuai');
 				redirect('Login');
             }
 	}
