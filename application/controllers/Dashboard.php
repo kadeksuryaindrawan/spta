@@ -12,7 +12,9 @@ class Dashboard extends CI_Controller {
     
     public function admin()
     {
+        $this->load->view('widget/header');
         $this->load->view('admin/dashboard');
+        $this->load->view('widget/footer');
     }
 
     public function dosen()
