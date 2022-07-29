@@ -193,6 +193,7 @@ class Mahasiswa_model extends CI_Model
     public function getPembimbingProposal()
 	{
         $this->db->join('dosen', 'mahasiswa.dosbing1 = dosen.nip');
+        $this->db->where('status_dosbing', 'disetujui');
 		$result = $this->db->get('mahasiswa');
 		return $result;
 	}
@@ -201,6 +202,7 @@ class Mahasiswa_model extends CI_Model
 	{
         $edit = array(
             'dosbing1' => $this->input->post('dosbing1'),
+            'status_dosbing' => 'disetujui'
         );
         $this->db->where('nim', $this->input->post('nim'));
         $result = $this->db->update('mahasiswa', $edit);
@@ -229,6 +231,7 @@ class Mahasiswa_model extends CI_Model
 	{
 		$edit = array(
             'dosbing1' => NULL,
+            'status_dosbing' => 'belum disetujui',
         );
         $this->db->where('nim', $id);
         $result = $this->db->update('mahasiswa', $edit);
@@ -287,6 +290,27 @@ class Mahasiswa_model extends CI_Model
         $this->db->where('nim', $id);
         $result = $this->db->update('mahasiswa', $edit);
         return $result;
+	}
+
+    public function getPembimbingMahasiswaNull()
+	{
+        $this->db->where('dosbing1 IS NOT NULL',NULL);
+		$result = $this->db->get('mahasiswa');
+		return $result;
+	}
+
+    public function getPembimbingMahasiswaNull2()
+	{
+        $this->db->where('dosbing2 IS NOT NULL',NULL);
+		$result = $this->db->get('mahasiswa');
+		return $result;
+	}
+
+    public function getMahasiswaProposal()
+	{
+        $this->db->join('mahasiswa', 'proposal.nim = mahasiswa.nim');
+		$result = $this->db->get('proposal');
+		return $result;
 	}
                         
 }

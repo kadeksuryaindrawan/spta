@@ -66,7 +66,7 @@ class MahasiswaController extends CI_Controller {
         $this->load->view('widget/footer'); 
 	}
 
-    public function editProcess($id)
+    public function editProcess()
 	{
 		$this->form_validation->set_rules('email', 'email','required|min_length[1]|max_length[100]');
         $this->form_validation->set_rules('name', 'nama','required|min_length[2]|max_length[255]');
