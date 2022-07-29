@@ -66,7 +66,13 @@
                                             <?php
                                         }
 
-                                        else{
+                                        elseif($key['dosbing1'] != NULL && $key['status_dosbing'] == 'belum disetujui'){
+                                            ?>
+                                                <td class="text-danger"> Belum Ada </td>
+                                            <?php
+                                        }
+
+                                        elseif($key['dosbing1'] != NULL && $key['status_dosbing'] == 'disetujui'){
                                             ?>
                                                 <td class="text-success"> Sudah Ada </td>
                                             <?php
