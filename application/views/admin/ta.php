@@ -62,7 +62,7 @@
                                         }
                                         else{
                                             ?>
-                                                <td class="text-success"><?= $key['nama_penguji1'] ?></td>
+                                                <td class="text-success">Sudah Ada</td>
                                             <?php
                                         }
                                     ?>
@@ -74,7 +74,7 @@
                                         }
                                         else{
                                             ?>
-                                                <td class="text-success"><?= $key['nama_penguji2'] ?></td>
+                                                <td class="text-success">Sudah Ada</td>
                                             <?php
                                         }
                                     ?>
@@ -112,6 +112,11 @@
                                             if($key['penguji1'] == NULL && $key['penguji2'] == NULL){
                                                 ?>
                                                     <a href="<?= base_url('TAController/penguji/'.$key['ta_id']) ?>"><button class="btn btn-warning btn-sm text-white">Tentukan Penguji</button></a>
+                                                <?php
+                                            }
+                                            else{
+                                                ?>
+                                                    <a href="<?= base_url('TAController/lihatPenguji/'.$key['ta_id']) ?>"><button class="btn btn-warning btn-sm text-white">Lihat Penguji</button></a>
                                                 <?php
                                             }
                                         ?>

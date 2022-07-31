@@ -116,6 +116,14 @@ class MahasiswaController extends CI_Controller {
         $this->load->view('widget/footer');  
     }
 
+    public function pembimbingProposal2()
+    {
+        $data['mhs'] = $this->Mahasiswa_model->getPembimbingProposal2();
+        $this->load->view('widget/header');
+        $this->load->view('admin/pembimbing-proposal',$data);
+        $this->load->view('widget/footer');  
+    }
+
     public function pembimbingTA()
     {
         $data['mhs'] = $this->Mahasiswa_model->getPembimbingTA();
@@ -190,12 +198,25 @@ class MahasiswaController extends CI_Controller {
 
     public function tambahPembimbingProposalProcess()
     {
-        $this->form_validation->set_rules('nim', 'Mahasiswa','required');
-        $this->form_validation->set_rules('dosbing1', 'Dosen Pembimbing','required');
+        $level = $this->session->userdata('level');
+        if($level == 'admin'){
+            $this->form_validation->set_rules('nim', 'Mahasiswa','required');
+            $this->form_validation->set_rules('dosbing1', 'Dosen Pembimbing','required');
+        }
+        elseif($level == 'mahasiswa'){
+            $this->form_validation->set_rules('dosbing1', 'Dosen Pembimbing','required');
+        }
+        
+        
 		if ($this->form_validation->run()==true){
 			$this->Mahasiswa_model->tambahPembimbingProposal();
             $this->session->set_flashdata('success','Pembimbing proposal sukses ditambah!');
-			redirect('MahasiswaController/pembimbingProposal');
+            if($level == 'admin'){
+                redirect('MahasiswaController/pembimbingProposal');
+            }
+			elseif($level == 'mahasiswa'){
+                redirect('Dashboard/mahasiswa');
+            }
         }
         else{
             $this->session->set_flashdata('error', validation_errors());
@@ -232,6 +253,43 @@ class MahasiswaController extends CI_Controller {
 		$this->Mahasiswa_model->deletePembimbingProposal($id);
         $this->session->set_flashdata('success','Berhasil menghapus Pembimbing!');
 		redirect('MahasiswaController/pembimbingProposal');
+	}
+
+    public function terimaMahasiswa($id)
+	{
+		$edit = array(
+            'status_dosbing' => 'disetujui',
+        );
+        $this->db->where('mahasiswa.nim', $id);
+        $result = $this->db->update('mahasiswa', $edit);
+        if($result){
+            $this->session->set_flashdata('success','Berhasil menerima Mahasiswa!');
+		    redirect('MahasiswaController/pembimbingProposal');
+        }
+        else{
+            $this->session->set_flashdata('error','Gagal menerima Mahasiswa!');
+		    redirect('MahasiswaController/pembimbingProposal');
+        }
+        
+	}
+
+    public function tolakMahasiswa($id)
+	{
+		$edit = array(
+            'dosbing1' => NULL,
+            'status_dosbing' => 'belum disetujui',
+        );
+        $this->db->where('mahasiswa.nim', $id);
+        $result = $this->db->update('mahasiswa', $edit);
+        if($result){
+            $this->session->set_flashdata('success','Berhasil menolak Mahasiswa!');
+		    redirect('MahasiswaController/pembimbingProposal');
+        }
+        else{
+            $this->session->set_flashdata('error','Gagal menolak Mahasiswa!');
+		    redirect('MahasiswaController/pembimbingProposal');
+        }
+        
 	}
 }
 

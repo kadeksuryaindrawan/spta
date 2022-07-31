@@ -192,20 +192,72 @@ class Mahasiswa_model extends CI_Model
     
     public function getPembimbingProposal()
 	{
-        $this->db->join('dosen', 'mahasiswa.dosbing1 = dosen.nip');
-        $this->db->where('status_dosbing', 'disetujui');
-		$result = $this->db->get('mahasiswa');
-		return $result;
+        $level = $this->session->userdata('level');
+
+        if($level == 'admin'){
+            $this->db->join('dosen', 'mahasiswa.dosbing1 = dosen.nip');
+            $this->db->where('status_dosbing', 'disetujui');
+		    $result = $this->db->get('mahasiswa');
+		    return $result;
+        }
+        elseif($level == 'dosen'){
+            $user_id = $this->session->userdata('user_id');
+        
+        $dosen = $this->db->get_where('dosen',array('user_id'=>$user_id))->row();
+        $nip = $dosen->nip;
+            $this->db->join('dosen', 'mahasiswa.dosbing1 = dosen.nip');
+            $this->db->where('status_dosbing', 'belum disetujui');
+            $this->db->where('dosbing1', $nip);
+		    $result = $this->db->get('mahasiswa');
+		    return $result;
+        }
+	}
+
+    public function getPembimbingProposal2()
+	{
+        $user_id = $this->session->userdata('user_id');
+        $level = $this->session->userdata('level');
+        $dosen = $this->db->get_where('dosen',array('user_id'=>$user_id))->row();
+        $nip = $dosen->nip;
+        
+        if($level == 'admin'){
+            $this->db->join('dosen', 'mahasiswa.dosbing1 = dosen.nip');
+            $this->db->where('status_dosbing', 'disetujui');
+		    $result = $this->db->get('mahasiswa');
+		    return $result;
+        }
+        elseif($level == 'dosen'){
+            $this->db->join('dosen', 'mahasiswa.dosbing1 = dosen.nip');
+            $this->db->where('status_dosbing', 'disetujui');
+            $this->db->where('dosbing1', $nip);
+		    $result = $this->db->get('mahasiswa');
+		    return $result;
+        }
 	}
 
     public function tambahPembimbingProposal()
 	{
-        $edit = array(
-            'dosbing1' => $this->input->post('dosbing1'),
-            'status_dosbing' => 'disetujui'
-        );
-        $this->db->where('nim', $this->input->post('nim'));
-        $result = $this->db->update('mahasiswa', $edit);
+        
+        $level = $this->session->userdata('level');
+        $user_id = $this->session->userdata('user_id');
+        $query = $this->db->get_where('mahasiswa',array('user_id'=>$user_id))->row();
+        $nim = $query->nim;
+        if($level == 'admin'){
+            $edit = array(
+                'dosbing1' => $this->input->post('dosbing1'),
+                'status_dosbing' => 'disetujui'
+            );
+            $this->db->where('nim', $this->input->post('nim'));
+            $result = $this->db->update('mahasiswa', $edit);
+        }
+        elseif($level == 'mahasiswa'){
+            $edit = array(
+                'dosbing1' => $this->input->post('dosbing1'),
+                'status_dosbing' => 'belum disetujui'
+            );
+            $this->db->where('nim', $nim);
+            $result = $this->db->update('mahasiswa', $edit);
+        }
 
         return $result;
 	}

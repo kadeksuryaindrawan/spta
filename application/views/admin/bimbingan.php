@@ -27,9 +27,18 @@
                     <div class="col-lg-10">
                         <h4 class="card-title">Data Bimbingan Mahasiswa</h4>
                     </div>
-                    
+                    <?php
+                        $level = $this->session->userdata('level');
+                    ?>
                     <div class="col-lg-2">
-                        <a href="<?= base_url('ProposalController/tambahBimbingan') ?>"><button class="btn btn-primary text-white">Tambah</button></a>
+                        <?php
+                            if($level == 'admin' || $level == 'mahasiswa'){
+                                ?>
+                                    <a href="<?= base_url('ProposalController/tambahBimbingan') ?>"><button class="btn btn-primary text-white">Tambah</button></a>
+                                <?php
+                            }
+                        ?>
+                        
                     </div>
                     </div>
                     
@@ -70,11 +79,35 @@
                                             <?php
                                         }
                                     ?>
+                                    <?php
+                                        if($level == 'admin' || $level == 'mahasiswa'){
+                                            ?>
+                                                <td>
+                                                    <a href="<?= base_url('ProposalController/editBimbingan/'.$key['bimbingan_proposal_id']) ?>"><button class="btn btn-primary btn-sm text-white">Edit</button></a>
+                                                    <a href="<?= base_url('ProposalController/deleteBimbingan/'.$key['bimbingan_proposal_id']) ?>" onclick = "return confirm('Yakin hapus bimbingan?')"><button class="btn btn-danger btn-sm text-white">Delete</button></a>
+                                                </td>
+                                            <?php
+                                        }
+
+                                        elseif($level == 'dosen'){
+                                            if($key['status_bimbingan'] == 'belum disetujui'){
+                                                ?>
+                                                    <td>
+                                                        <a href="<?= base_url('ProposalController/setujuiBimbingan/'.$key['bimbingan_proposal_id']) ?>" onclick = "return confirm('Yakin setujui bimbingan?')"><button class="btn btn-success btn-sm text-white">Setujui</button></a>
+                                                        <a href="<?= base_url('ProposalController/tolakBimbingan/'.$key['bimbingan_proposal_id']) ?>" onclick = "return confirm('Yakin tolak bimbingan?')"><button class="btn btn-danger btn-sm text-white">Tolak</button></a>
+                                                    </td>
+                                                <?php
+                                            }
+                                            else{
+                                                ?>
+                                                    <td>
+                                                        -
+                                                    </td>
+                                                <?php
+                                            }
+                                        }
+                                    ?>
                                     
-                                    <td>
-                                        <a href="<?= base_url('ProposalController/editBimbingan/'.$key['bimbingan_proposal_id']) ?>"><button class="btn btn-primary btn-sm text-white">Edit</button></a>
-                                        <a href="<?= base_url('ProposalController/deleteBimbingan/'.$key['bimbingan_proposal_id']) ?>" onclick = "return confirm('Yakin hapus bimbingan?')"><button class="btn btn-danger btn-sm text-white">Delete</button></a>
-                                    </td>
                                 </tr>
                             <?php endforeach ?>
                                 

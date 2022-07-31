@@ -54,6 +54,22 @@ class TAController extends CI_Controller {
         @readfile($filename);
     }
 
+    public function lihatPenguji($id)
+    {
+        $ta = $this->db->get_where('ta',array('ta_id'=>$id))->row();
+        $penguji1 = $ta->penguji1;
+        $penguji2 = $ta->penguji2;
+        $nim = $ta->nim;
+
+        $data['mhs'] = $this->db->get_where('mahasiswa',array('nim'=>$nim))->row();
+        $data['penguji1'] = $this->db->get_where('penguji1',array('nip'=>$penguji1))->row();
+        $data['penguji2'] = $this->db->get_where('penguji2',array('nip'=>$penguji2))->row();
+
+        $this->load->view('widget/header');
+        $this->load->view('admin/lihat-penguji-ta',$data);
+        $this->load->view('widget/footer');  
+    }
+
     public function delete($id)
 	{
 		$this->TA_model->deleteTA($id);
