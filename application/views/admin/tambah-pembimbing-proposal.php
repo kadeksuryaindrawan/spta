@@ -30,8 +30,11 @@
 									</div>
 							<?php endif ?>
                         <form action="<?= base_url('MahasiswaController/tambahPembimbingProposalProcess') ?>" method="POST">
-                            
-                            <div class="form-group">
+                            <?php
+                                $level = $this->session->userdata('level');
+                                if($level == 'admin'){
+                                    ?>
+                                        <div class="form-group">
                                 <label for="nim">Pilih Mahasiswa</label>
                                 <select name="nim" id="nim" class="form-control input-default">
                                     <option value="">Pilih Mahasiswa</option>
@@ -52,6 +55,25 @@
 		                            <?php endforeach ?>
                                 </select>
                             </div>
+                                    <?php
+                                }
+                                else{
+                                    ?>
+
+                            <div class="form-group">
+                                <label for="nip">Pilih Dosen Pembimbing Proposal</label>
+                                <select name="dosbing1" id="nip" class="form-control input-default">
+                                    <option value="">Pilih Dosen</option>
+                                    <?php
+                                    foreach ($dosen->result_array() as $key): ?>
+                                        <option value="<?= $key['nip'] ?>"><?= $key['name'] ?></option>
+		                            <?php endforeach ?>
+                                </select>
+                            </div>
+                                    <?php
+                                }
+                            ?>
+                            
 
                             <div class="row">
                                 <div class="col-12">
@@ -62,7 +84,20 @@
                         </form>
                         <div class="row mt-2">
                                 <div class="col-12">
-                                    <a href="<?= base_url('MahasiswaController/pembimbingProposal') ?>"><button class="w-100 btn btn-danger text-white">Kembali</button></a>
+                                    <?php
+                                        $level = $this->session->userdata('level');
+                                        if($level == 'admin'){
+                                            ?>
+                                                <a href="<?= base_url('MahasiswaController/pembimbingProposal') ?>"><button class="w-100 btn btn-danger text-white">Kembali</button></a>
+                                            <?php
+                                        }
+                                        elseif($level == 'mahasiswa'){
+                                            ?>
+                                                <a href="<?= base_url('Dashboard/mahasiswa') ?>"><button class="w-100 btn btn-danger text-white">Kembali</button></a>
+                                            <?php
+                                        }
+                                    ?>
+                                    
                                 </div>
                             </div>
                     </div>

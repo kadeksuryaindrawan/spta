@@ -79,9 +79,25 @@ class Ujian_model extends CI_Model
         $query = $this->db->get_where('proposal',array('proposal_id'=>$proposal_id))->row();
         $nim = $query->nim;
         $nilai = $this->input->post('nilai');
-        if($nilai >=66 && $nilai <= 100){
+        if($nilai >=90 && $nilai <= 100){
             $edit = array(
                 'nilai' => $nilai,
+                'grade' => 'A',
+                'status_up' => 'lulus',
+                
+            );
+            $editmhs = array(
+            'status' => 'lulus UP',
+                
+            );
+            $editproposal = array(
+                'status_proposal' => 'lulus',
+                );
+        }
+        elseif($nilai >=80 && $nilai <= 89){
+            $edit = array(
+                'nilai' => $nilai,
+                'grade' => 'AB',
             'status_up' => 'lulus',
                 
             );
@@ -91,12 +107,43 @@ class Ujian_model extends CI_Model
             );
             $editproposal = array(
                 'status_proposal' => 'lulus',
-                    
                 );
         }
-        elseif($nilai <=65){
+        elseif($nilai >=70 && $nilai <= 79){
             $edit = array(
                 'nilai' => $nilai,
+                'grade' => 'B',
+            'status_up' => 'lulus',
+                
+            );
+            $editmhs = array(
+            'status' => 'lulus UP',
+                
+            );
+            $editproposal = array(
+                'status_proposal' => 'lulus',
+                );
+        }
+
+        elseif($nilai >=60 && $nilai <= 69){
+            $edit = array(
+                'nilai' => $nilai,
+                'grade' => 'BC',
+            'status_up' => 'lulus',
+                
+            );
+            $editmhs = array(
+            'status' => 'lulus UP',
+                
+            );
+            $editproposal = array(
+                'status_proposal' => 'lulus',
+                );
+        }
+        elseif($nilai <=59){
+            $edit = array(
+                'nilai' => $nilai,
+                'grade' => 'C',
             'status_up' => 'tidak lulus',
                 
             );

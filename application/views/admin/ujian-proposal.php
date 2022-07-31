@@ -42,6 +42,7 @@
                                     <th>Judul</th>
                                     <th>Waktu Ujian</th>
                                     <th>Nilai</th>
+                                    <th>Grade</th>
                                     <th>Status Ujian</th>
                                     <th>Action</th>
                                 </tr>
@@ -57,16 +58,19 @@
                                     if($key['nilai'] == NULL){
                                         ?>
                                             <td class="text-center">-</td>
+                                            <td class="text-center">-</td>
                                         <?php
                                     }
-                                        elseif($key['nilai'] >= 66 && $key['nilai'] <=100){
+                                        elseif($key['nilai'] >= 60 && $key['nilai'] <=100){
                                             ?>
                                                 <td class="text-success text-center"><?= $key['nilai'] ?></td>
+                                                <td class="text-success text-center"><?= $key['grade'] ?></td>
                                             <?php
                                         }
-                                        elseif($key['nilai'] <= 65){
+                                        elseif($key['nilai'] <= 59){
                                             ?>
                                                 <td class="text-danger text-center"><?= $key['nilai'] ?></td>
+                                                <td class="text-danger text-center"><?= $key['grade'] ?></td>
                                             <?php
                                         }
                                         
@@ -115,6 +119,7 @@
                                     <th>Judul</th>
                                     <th>Waktu Ujian</th>
                                     <th>Nilai</th>
+                                    <th>Grade</th>
                                     <th>Status Ujian</th>
                                     <th>Action</th>
                                 </tr>

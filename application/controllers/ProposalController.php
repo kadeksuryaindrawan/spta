@@ -11,6 +11,7 @@ class ProposalController extends CI_Controller {
         $this->load->model('Dosen_model');
         $this->load->model('Auth_model');
         $this->Auth_model->cek_login();
+        date_default_timezone_set("Asia/Makassar");
     }
     public function index()
     {  
@@ -88,6 +89,7 @@ class ProposalController extends CI_Controller {
 
     public function bimbingan()
     {
+        //var_dump(date('Y-m-d H:i:s'));
         $data['bimbingan'] = $this->Proposal_model->getBimbingan();
         $this->load->view('widget/header');
         $this->load->view('admin/bimbingan',$data);
@@ -159,6 +161,22 @@ class ProposalController extends CI_Controller {
         $data['proposal'] = $this->Proposal_model->getDetailProposal($id);
         $this->load->view('widget/header');
         $this->load->view('admin/penguji',$data);
+        $this->load->view('widget/footer');  
+    }
+
+    public function lihatPenguji($id)
+    {
+        $proposal = $this->db->get_where('proposal',array('proposal_id'=>$id))->row();
+        $penguji1 = $proposal->penguji1;
+        $penguji2 = $proposal->penguji2;
+        $nim = $proposal->nim;
+
+        $data['mhs'] = $this->db->get_where('mahasiswa',array('nim'=>$nim))->row();
+        $data['penguji1'] = $this->db->get_where('penguji1',array('nip'=>$penguji1))->row();
+        $data['penguji2'] = $this->db->get_where('penguji2',array('nip'=>$penguji2))->row();
+
+        $this->load->view('widget/header');
+        $this->load->view('admin/lihat-penguji',$data);
         $this->load->view('widget/footer');  
     }
 

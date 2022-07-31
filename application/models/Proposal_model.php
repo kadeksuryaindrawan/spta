@@ -5,20 +5,26 @@ class Proposal_model extends CI_Model
 {
     public function getProposal()
 	{
-        $query = $this->db->get_where('proposal',array('penguji1'=>NULL,'penguji2' => NULL));
-        if($query->num_rows() > 0){
+        $level = $this->session->userdata('level');
+        if($level == 'admin'){
             $this->db->join('mahasiswa', 'proposal.nim = mahasiswa.nim');
+            // $this->db->join('penguji1', 'proposal.penguji1 = penguji1.nip');
+            // $this->db->join('penguji2', 'proposal.penguji2 = penguji2.nip');
             $result = $this->db->get('proposal');
             return $result;
         }
-        else{
+        elseif($level == 'dosen'){
+            $user_id = $this->session->userdata('user_id');
+            $dosen = $this->db->get_where('dosen',array('user_id'=>$user_id))->row();
+            $nip = $dosen->nip;
+
             $this->db->join('mahasiswa', 'proposal.nim = mahasiswa.nim');
-            $this->db->join('penguji1', 'proposal.penguji1 = penguji1.nip');
-            $this->db->join('penguji2', 'proposal.penguji2 = penguji2.nip');
+            $this->db->where('dosbing1',$nip);
+            // $this->db->join('penguji1', 'proposal.penguji1 = penguji1.nip');
+            // $this->db->join('penguji2', 'proposal.penguji2 = penguji2.nip');
             $result = $this->db->get('proposal');
             return $result;
         }
-		
 	}  
     
     public function getProposalBimbingan()
@@ -132,10 +138,25 @@ class Proposal_model extends CI_Model
 
     public function getBimbingan()
 	{
-		$this->db->join('proposal', 'bimbingan_proposal.proposal_id = proposal.proposal_id');
-        $this->db->join('mahasiswa', 'proposal.nim = mahasiswa.nim');
-        $this->db->where('bimbingan_proposal.status_bimbingan', 'disetujui');
-		$result = $this->db->get('bimbingan_proposal');
+        $level = $this->session->userdata('level');
+
+        if($level == 'admin'){
+            $this->db->join('proposal', 'bimbingan_proposal.proposal_id = proposal.proposal_id');
+            $this->db->join('mahasiswa', 'proposal.nim = mahasiswa.nim');
+            $this->db->where('bimbingan_proposal.status_bimbingan', 'disetujui');
+            $result = $this->db->get('bimbingan_proposal');
+		
+        }
+        elseif($level == 'dosen'){
+            $user_id = $this->session->userdata('user_id');
+            $dosen = $this->db->get_where('dosen',array('user_id'=>$user_id))->row();
+            $nip = $dosen->nip;
+
+            $this->db->join('proposal', 'bimbingan_proposal.proposal_id = proposal.proposal_id');
+            $this->db->join('mahasiswa', 'proposal.nim = mahasiswa.nim');
+            $this->db->where('dosbing1',$nip);
+            $result = $this->db->get('bimbingan_proposal');
+        }
 		return $result;
 	}
 

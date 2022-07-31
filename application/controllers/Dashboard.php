@@ -19,12 +19,34 @@ class Dashboard extends CI_Controller {
 
     public function dosen()
     {
+        $this->load->view('widget/header');
         $this->load->view('dosen/dashboard');
+        $this->load->view('widget/footer');
+        
     }
 
     public function mahasiswa()
     {
-        $this->load->view('mahasiswa/dashboard');
+        $user_id = $this->session->userdata('user_id');
+        $query = $this->db->get_where('mahasiswa',array('user_id'=>$user_id))->row();
+        $status_dosbing = $query->status_dosbing;
+        $dosbing1 = $query->dosbing1;
+        if($dosbing1 != NULL && $status_dosbing == 'disetujui'){
+            $this->load->view('widget/header');
+            $this->load->view('mahasiswa/dashboard');
+            $this->load->view('widget/footer');
+        }
+        elseif($dosbing1 == NULL && $status_dosbing == 'belum disetujui'){
+            $this->load->view('widget/header');
+            $this->load->view('mahasiswa/dashboard2');
+            $this->load->view('widget/footer');
+        }
+        elseif($dosbing1 != NULL && $status_dosbing == 'belum disetujui'){
+            $this->load->view('widget/header');
+            $this->load->view('mahasiswa/dashboard3');
+            $this->load->view('widget/footer');
+        }
+        
     }
 }
 

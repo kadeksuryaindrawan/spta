@@ -122,7 +122,12 @@
             <div class="nk-nav-scroll">
                 <ul class="metismenu" id="menu">
                     <li class="nav-label">Dashboard</li>
-                    <li>
+                    <?php
+                        $level = $this->session->userdata('level');
+                        $user_id = $this->session->userdata('user_id');
+                        if($level == 'admin'){
+                            ?>
+                                <li>
                         <a href="<?= base_url('Dashboard/admin') ?>">
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
@@ -185,6 +190,115 @@
                             <li><a href="<?= base_url('UjianController/ta') ?>">Ujian TA</a></li>
                         </ul>
                     </li>
+                            <?php
+                        }
+
+                        elseif($level == 'mahasiswa'){
+                            $query = $this->db->get_where('mahasiswa',array('user_id'=>$user_id))->row();
+                            $status_dosbing = $query->status_dosbing;
+                            if($status_dosbing == "belum disetujui"){
+                                ?>
+                                    <li>
+                                        <a href="<?= base_url('Dashboard/mahasiswa') ?>">
+                                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                                        </a>
+                                        
+                                    </li>
+                                <?php
+                            }
+                            elseif($status_dosbing == "disetujui"){
+                                ?>
+                                    <li>
+                        <a href="<?= base_url('Dashboard/mahasiswa') ?>">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                        </a>
+                        
+                    </li>
+                                <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-user menu-icon"></i><span class="nav-text">Pembimbing</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="<?= base_url('MahasiswaController/pembimbingProposal') ?>">Pembimbing Proposal</a></li>
+                            <li><a href="<?= base_url('MahasiswaController/pembimbingTA') ?>">Pembimbing TA</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Proposal</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="<?= base_url('ProposalController') ?>">Data Proposal</a></li>
+                            <li><a href="<?= base_url('ProposalController/bimbingan') ?>">Bimbingan</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Tugas Akhir</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="<?= base_url('TAController') ?>">Data TA</a></li>
+                            <li><a href="<?= base_url('TAController/bimbingan') ?>">Bimbingan</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Ujian</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="<?= base_url('UjianController') ?>">Ujian Proposal</a></li>
+                            <li><a href="<?= base_url('UjianController/ta') ?>">Ujian TA</a></li>
+                        </ul>
+                    </li>
+                                <?php
+                            }
+                        }
+
+                        elseif($level == 'dosen'){
+                            ?>
+                                <li>
+                        <a href="<?= base_url('Dashboard/dosen') ?>">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                        </a>
+                        
+                    </li>
+
+                    <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-user menu-icon"></i><span class="nav-text">Pembimbing</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="<?= base_url('MahasiswaController/pembimbingProposal2') ?>">Daftar Mahasiswa Bimbingan</a></li>
+                            <li><a href="<?= base_url('MahasiswaController/pembimbingProposal') ?>">Permintaan Bimbingan</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Proposal</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="<?= base_url('ProposalController') ?>">Data Proposal</a></li>
+                            <li><a href="<?= base_url('ProposalController/bimbingan') ?>">Bimbingan</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Tugas Akhir</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="<?= base_url('TAController') ?>">Data TA</a></li>
+                            <li><a href="<?= base_url('TAController/bimbingan') ?>">Bimbingan</a></li>
+                        </ul>
+                    </li>
+                            <?php
+                        }
+                    ?>
+                    
                     
                 </ul>
             </div>

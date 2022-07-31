@@ -24,7 +24,9 @@ class Login extends CI_Controller {
 		$query = $this->db->get_where('users',array('email'=>$email));
         $user = $query->row();
         $level = $user->level;
+		$user_id = $user->user_id;
             if(password_verify($password, $user->password)) {
+				$this->session->set_userdata('user_id',$user_id);
                 $this->session->set_userdata('email',$email);
 				$this->session->set_userdata('level',$level);
 				$this->session->set_userdata('name',$user->name);

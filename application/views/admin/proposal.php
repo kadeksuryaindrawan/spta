@@ -27,9 +27,18 @@
                     <div class="col-lg-10">
                         <h4 class="card-title">Data Proposal Mahasiswa</h4>
                     </div>
-                    
+                    <?php
+                        $level = $this->session->userdata('level');
+                    ?>
                     <div class="col-lg-2">
-                        <a href="<?= base_url('ProposalController/tambah') ?>"><button class="btn btn-primary text-white">Tambah</button></a>
+                        <?php
+                            if($level == 'admin' || $level == 'mahasiswa'){
+                                ?>
+                                    <a href="<?= base_url('ProposalController/tambah') ?>"><button class="btn btn-primary text-white">Tambah</button></a>
+                                <?php
+                            }
+                        ?>
+                        
                     </div>
                     </div>
                     
@@ -62,7 +71,7 @@
                                         }
                                         else{
                                             ?>
-                                                <td class="text-success"><?= $key['nama_penguji1'] ?></td>
+                                                <td class="text-success">Sudah Ada</td>
                                             <?php
                                         }
                                     ?>
@@ -74,7 +83,7 @@
                                         }
                                         else{
                                             ?>
-                                                <td class="text-success"><?= $key['nama_penguji2'] ?></td>
+                                                <td class="text-success">Sudah Ada</td>
                                             <?php
                                         }
                                     ?>
@@ -105,18 +114,67 @@
                                     <td>
                                         <a href="<?= base_url('upload/proposal/'.$key['file']) ?>" target="_BLANK"><button class="btn btn-success btn-sm text-white">Lihat</button></a>
                                     </td>
-                                    <td>
-                                        <a href="<?= base_url('ProposalController/edit/'.$key['proposal_id']) ?>"><button class="btn btn-primary btn-sm text-white">Edit</button></a>
-                                        <a href="<?= base_url('ProposalController/delete/'.$key['proposal_id']) ?>" onclick = "return confirm('Yakin hapus proposal?')"><button class="btn btn-danger btn-sm text-white">Delete</button></a>
-                                        <?php
-                                            if($key['penguji1'] == NULL && $key['penguji2'] == NULL){
-                                                ?>
-                                                    <a href="<?= base_url('ProposalController/penguji/'.$key['proposal_id']) ?>"><button class="btn btn-warning btn-sm text-white">Tentukan Penguji</button></a>
-                                                <?php
-                                            }
-                                        ?>
+                                    <?php
                                         
-                                    </td>
+                                        if($level == 'admin'){
+                                            ?>
+                                                <td>
+                                                    <a href="<?= base_url('ProposalController/edit/'.$key['proposal_id']) ?>"><button class="btn btn-primary btn-sm text-white">Edit</button></a>
+                                                    <a href="<?= base_url('ProposalController/delete/'.$key['proposal_id']) ?>" onclick = "return confirm('Yakin hapus proposal?')"><button class="btn btn-danger btn-sm text-white">Delete</button></a>
+                                                    <?php
+                                                        if($key['penguji1'] == NULL && $key['penguji2'] == NULL){
+                                                            ?>
+                                                                <a href="<?= base_url('ProposalController/penguji/'.$key['proposal_id']) ?>"><button class="btn btn-warning btn-sm text-white">Tentukan Penguji</button></a>
+                                                            <?php
+                                                        }
+                                                        else{
+                                                            ?>
+                                                                <a href="<?= base_url('ProposalController/lihatPenguji/'.$key['proposal_id']) ?>"><button class="btn btn-warning btn-sm text-white">Lihat Penguji</button></a>
+                                                            <?php
+                                                        }
+                                                    ?>
+                                                    
+                                                </td>
+                                            <?php
+                                        }
+
+                                        elseif($level == 'dosen'){
+                                            ?>
+                                                <td>
+                                                    <?php
+                                                        if($key['penguji1'] == NULL && $key['penguji2'] == NULL){
+                                                            ?>
+                                                                -
+                                                            <?php
+                                                        }
+                                                        else{
+                                                            ?>
+                                                                <a href="<?= base_url('ProposalController/lihatPenguji/'.$key['proposal_id']) ?>"><button class="btn btn-warning btn-sm text-white">Lihat Penguji</button></a>
+                                                            <?php
+                                                        }
+                                                    ?>
+                                                </td>
+                                            <?php
+                                        }
+
+                                        elseif($level == 'mahasiswa'){
+                                            ?>
+                                                <td>
+                                                    <a href="<?= base_url('ProposalController/edit/'.$key['proposal_id']) ?>"><button class="btn btn-primary btn-sm text-white">Edit</button></a>
+                                                    <a href="<?= base_url('ProposalController/delete/'.$key['proposal_id']) ?>" onclick = "return confirm('Yakin hapus proposal?')"><button class="btn btn-danger btn-sm text-white">Delete</button></a>
+                                                    <?php
+                                                        if($key['penguji1'] != NULL && $key['penguji2'] != NULL){
+                                                            ?>
+                                                                <a href="<?= base_url('ProposalController/lihatPenguji/'.$key['proposal_id']) ?>"><button class="btn btn-warning btn-sm text-white">Lihat Penguji</button></a>
+                                                            <?php
+                                                        }
+                                                    ?>
+                                                    
+                                                </td>
+                                            <?php
+                                        }
+                                    ?>
+                                    
                                 </tr>
                             <?php endforeach ?>
                                 

@@ -5,19 +5,11 @@ class TA_model extends CI_Model
 {
     public function getTA()
 	{
-        $query = $this->db->get_where('ta',array('penguji1'=>NULL,'penguji2' => NULL));
-        if($query->num_rows() > 0){
             $this->db->join('mahasiswa', 'ta.nim = mahasiswa.nim');
+            // $this->db->join('penguji1', 'ta.penguji1 = penguji1.nip');
+            // $this->db->join('penguji2', 'ta.penguji2 = penguji2.nip');
             $result = $this->db->get('ta');
             return $result;
-        }
-        else{
-            $this->db->join('mahasiswa', 'ta.nim = mahasiswa.nim');
-            $this->db->join('penguji1', 'ta.penguji1 = penguji1.nip');
-            $this->db->join('penguji2', 'ta.penguji2 = penguji2.nip');
-            $result = $this->db->get('ta');
-            return $result;
-        }
 		
 	}  
     
